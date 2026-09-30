@@ -31,8 +31,8 @@ export function getCloudinaryConfig(): CloudinaryConfig {
   }
 
   return {
-    cloudName: (import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'LinkZeeIMG').trim(),
-    uploadPreset: (import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || '2im-5GQw2-Is0ofiVfSeJChTlAA').trim(),
+    cloudName: (import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '').trim(),
+    uploadPreset: (import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || '').trim(),
   };
 }
 

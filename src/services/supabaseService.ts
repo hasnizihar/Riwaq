@@ -1,11 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { PhotoRecord, EventConfig, PhotoTemplate, EventCategory, EmailStatus } from '../types';
 
-const SUPABASE_URL =
-  import.meta.env.VITE_SUPABASE_URL || 'https://wamxkzyayghoorhldphc.supabase.co';
-const SUPABASE_ANON_KEY =
-  import.meta.env.VITE_SUPABASE_ANON_KEY ||
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhbXhrenlheWdob29yaGxkcGhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA3MDYwMzMsImV4cCI6MjEwNjI4MjAzM30.nhd0INfc07jvVH7cZ0qcqV5uI-YHDYFChXUjjFezt84';
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || '';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
 export const isSupabaseConfigured = (): boolean => {
   return !!SUPABASE_URL && !SUPABASE_URL.includes('your-project') && !!SUPABASE_ANON_KEY;
