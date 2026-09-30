@@ -73,23 +73,14 @@ export const AdminAuthGate: React.FC<AdminAuthGateProps> = ({
     onExit();
   };
 
+  useEffect(() => {
+    const listener = () => handleLogout();
+    window.addEventListener('admin_logout', listener);
+    return () => window.removeEventListener('admin_logout', listener);
+  }, [onExit]);
+
   if (isAuthenticated) {
-    return (
-      <div className="relative">
-        {/* Floating Logout Button */}
-        <div className="fixed top-2.5 right-14 z-50">
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#FAFAF7] hover:bg-[#F3F4F1] border border-[#E5E9E6] text-xs font-semibold text-[#66706A] hover:text-[#B42318] transition-colors shadow-sm cursor-pointer"
-            title="Lock Admin Session"
-          >
-            <Lock className="w-3.5 h-3.5" />
-            <span>Lock Admin</span>
-          </button>
-        </div>
-        {children}
-      </div>
-    );
+    return <>{children}</>;
   }
 
   return (

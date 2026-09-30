@@ -33,6 +33,7 @@ export const PhotoHistory: React.FC<PhotoHistoryProps> = ({
   const [inspectPhoto, setInspectPhoto] = useState<PhotoRecord | null>(null);
   const [resendingId, setResendingId] = useState<string | null>(null);
   const [copiedToken, setCopiedToken] = useState<string | null>(null);
+  const [photoToDelete, setPhotoToDelete] = useState<PhotoRecord | null>(null);
 
   const filteredPhotos = photos.filter((p) => {
     if (statusFilter === 'downloaded' && (!p.downloadCount || p.downloadCount <= 0)) return false;
@@ -85,11 +86,21 @@ export const PhotoHistory: React.FC<PhotoHistoryProps> = ({
     }
   };
 
-  const handleDelete = async (photoId: string) => {
-    if (confirm('Delete this photo record permanently?')) {
-      await deletePhoto(photoId);
+  const handleDeleteConfirm = async () => {
+    if (!photoToDelete) return;
+    try {
+      await deletePhoto(photoToDelete.id);
       onRefresh();
+    } catch (err) {
+      console.error('[PhotoHistory] Error during deletion:', err);
+      alert(`Deletion failed: ${err}`);
+    } finally {
+      setPhotoToDelete(null);
     }
+  };
+
+  const handleDeleteClick = (photo: PhotoRecord) => {
+    setPhotoToDelete(photo);
   };
 
   const handleCopyLink = (token: string) => {
@@ -284,7 +295,7 @@ export const PhotoHistory: React.FC<PhotoHistoryProps> = ({
                   </div>
 
                   <button
-                    onClick={() => handleDelete(photo.id)}
+                    onClick={() => handleDeleteClick(photo)}
                     className="p-1.5 text-[#66706A] hover:text-[#B42318] rounded-lg active:scale-90 transition-transform cursor-pointer"
                     title="Delete Record"
                   >
@@ -368,6 +379,40 @@ export const PhotoHistory: React.FC<PhotoHistoryProps> = ({
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Download Photo</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {photoToDelete && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#FFFFFF] border border-[#E5E9E6] rounded-2xl p-6 max-w-sm w-full shadow-xl relative space-y-4 text-center">
+            <div className="w-12 h-12 mx-auto rounded-full bg-[#B42318]/10 text-[#B42318] flex items-center justify-center mb-2">
+              <Trash2 className="w-6 h-6" />
+            </div>
+            
+            <h3 className="text-base font-bold text-[#17201B] font-['Manrope']">
+              Delete Photo?
+            </h3>
+            
+            <p className="text-xs text-[#66706A]">
+              Are you sure you want to delete this photo record? This action cannot be undone.
+            </p>
+            
+            <div className="grid grid-cols-2 gap-3 mt-6">
+              <button
+                onClick={() => setPhotoToDelete(null)}
+                className="h-11 rounded-xl bg-[#FAFAF7] hover:bg-[#E5E9E6] border border-[#E5E9E6] text-[#17201B] text-xs font-semibold active:scale-95 transition-transform"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                className="h-11 rounded-xl bg-[#B42318] hover:bg-[#911d14] text-white text-xs font-semibold active:scale-95 transition-transform shadow-sm"
+              >
+                Delete Photo
               </button>
             </div>
           </div>

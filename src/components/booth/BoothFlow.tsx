@@ -213,8 +213,8 @@ export const BoothFlow: React.FC<BoothFlowProps> = ({
         eventId: event.id,
         templateId: selectedTemplate.id,
         templateName: selectedTemplate.name,
-        originalPhotoUrl: originalPhoto,
-        originalUrl: originalPhoto,
+        originalPhotoUrl: '', // Omitted raw photo to prevent database/cloud upload
+        originalUrl: '',
         generatedPhotoUrl: compositeResult.dataUrl,
         finalUrl: compositeResult.dataUrl,
         email: '',

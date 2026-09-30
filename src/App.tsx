@@ -202,8 +202,8 @@ export default function App() {
 
   return (
     <div className="relative min-h-screen w-full bg-[#FAFAF7] text-[#17201B] flex flex-col antialiased">
-      {/* Top persistent mode switcher on desktop (hidden in Kiosk Mode) */}
-      {!isKioskMode && (
+      {/* Top persistent mode switcher on desktop (hidden in Kiosk Mode or Admin Mode) */}
+      {!isKioskMode && currentView !== 'admin' && (
         <div className="hidden sm:flex items-center justify-between px-6 py-2.5 bg-[#FFFFFF] border-b border-[#E5E9E6] text-xs text-[#66706A] z-40">
           <div className="flex items-center gap-3">
             <RiwaqLogo variant="horizontal" size="xs" showSubtitle={true} />

@@ -35,6 +35,7 @@ export const TemplateManager: React.FC<TemplateManagerProps> = ({
   const [filterRatio, setFilterRatio] = useState<string>('all');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [previewTemplate, setPreviewTemplate] = useState<PhotoTemplate | null>(null);
+  const [templateToDelete, setTemplateToDelete] = useState<PhotoTemplate | null>(null);
 
   // New Template Form State
   const [name, setName] = useState('');
@@ -61,11 +62,22 @@ export const TemplateManager: React.FC<TemplateManagerProps> = ({
     onRefresh();
   };
 
-  const handleDelete = async (templateId: string) => {
-    if (confirm('Delete this template?')) {
-      await deleteTemplate(templateId);
+  const handleDeleteConfirm = async () => {
+    if (!templateToDelete) return;
+    
+    try {
+      await deleteTemplate(templateToDelete.id);
       onRefresh();
+    } catch (err) {
+      console.error('[TemplateManager] Error during deletion:', err);
+      alert(`Deletion failed: ${err}`);
+    } finally {
+      setTemplateToDelete(null);
     }
+  };
+
+  const handleDeleteClick = (template: PhotoTemplate) => {
+    setTemplateToDelete(template);
   };
 
   const analyzeTransparency = (dataUrl: string) => {
@@ -285,7 +297,7 @@ export const TemplateManager: React.FC<TemplateManagerProps> = ({
                 </button>
 
                 <button
-                  onClick={() => handleDelete(template.id)}
+                  onClick={() => handleDeleteClick(template)}
                   className="p-1.5 text-[#66706A] hover:text-[#B42318] rounded-lg transition-colors"
                   aria-label="Delete"
                 >
@@ -533,6 +545,40 @@ export const TemplateManager: React.FC<TemplateManagerProps> = ({
             >
               Close
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {templateToDelete && (
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#FFFFFF] border border-[#E5E9E6] rounded-2xl p-6 max-w-sm w-full shadow-xl relative space-y-4 text-center">
+            <div className="w-12 h-12 mx-auto rounded-full bg-[#B42318]/10 text-[#B42318] flex items-center justify-center mb-2">
+              <Trash2 className="w-6 h-6" />
+            </div>
+            
+            <h3 className="text-base font-bold text-[#17201B] font-['Manrope']">
+              Delete Template?
+            </h3>
+            
+            <p className="text-xs text-[#66706A]">
+              Are you sure you want to delete <span className="font-semibold text-[#17201B]">"{templateToDelete.name}"</span>? This action cannot be undone.
+            </p>
+            
+            <div className="grid grid-cols-2 gap-3 mt-6">
+              <button
+                onClick={() => setTemplateToDelete(null)}
+                className="h-11 rounded-xl bg-[#FAFAF7] hover:bg-[#E5E9E6] border border-[#E5E9E6] text-[#17201B] text-xs font-semibold active:scale-95 transition-transform"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                className="h-11 rounded-xl bg-[#B42318] hover:bg-[#911d14] text-white text-xs font-semibold active:scale-95 transition-transform shadow-sm"
+              >
+                Delete Template
+              </button>
+            </div>
           </div>
         </div>
       )}

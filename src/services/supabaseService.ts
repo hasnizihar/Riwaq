@@ -416,8 +416,39 @@ export async function deleteTemplateFromSupabase(templateId: string): Promise<bo
   if (!isSupabaseConfigured()) return false;
   try {
     const { error } = await supabase.from('templates').delete().eq('id', templateId);
+    if (error) {
+      console.warn('[Supabase] Template delete warning:', error.message);
+    }
     return !error;
-  } catch {
+  } catch (err) {
+    console.warn('[Supabase] Failed to delete template:', err);
+    return false;
+  }
+}
+
+/**
+ * Deletes a photo record from Supabase by ID.
+ * Uses secure RPC 'admin_delete_photo' if available, falls back to direct delete.
+ */
+export async function deletePhotoFromSupabase(photoId: string): Promise<boolean> {
+  if (!isSupabaseConfigured()) return false;
+  try {
+    // Try secure RPC first
+    const { error: rpcError } = await supabase.rpc('admin_delete_photo', {
+      p_id: photoId,
+    });
+
+    if (!rpcError) return true;
+
+    // Fallback to direct delete
+    const { error } = await supabase.from('photos').delete().eq('id', photoId);
+    if (error) {
+      console.warn('[Supabase] Photo delete warning:', error.message);
+      return false;
+    }
+    return true;
+  } catch (err) {
+    console.warn('[Supabase] Failed to delete photo from cloud:', err);
     return false;
   }
 }

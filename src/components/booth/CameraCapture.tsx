@@ -5,6 +5,7 @@ import {
   ArrowLeft,
   ShieldAlert,
   HelpCircle,
+  FlipHorizontal,
 } from 'lucide-react';
 
 interface CameraCaptureProps {
@@ -21,9 +22,11 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
   const [stream, setStream] = useState<MediaStream | null>(null);
   const [cameraError, setCameraError] = useState<string | null>(null);
   const [facingMode, setFacingMode] = useState<'user' | 'environment'>('user');
+  const [isMirrored, setIsMirrored] = useState(true); // Mirror ON by default for selfie
   const [isFlashing, setIsFlashing] = useState(false);
   const [isLoadingCamera, setIsLoadingCamera] = useState(false);
   const [showPermissionGuide, setShowPermissionGuide] = useState(false);
+  const [hasMultipleCameras, setHasMultipleCameras] = useState(false);
 
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -90,6 +93,26 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
   }, [stopCurrentStream]);
 
   useEffect(() => {
+    const checkCameras = async () => {
+      try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const videoInputs = devices.filter(device => device.kind === 'videoinput');
+        setHasMultipleCameras(videoInputs.length > 1);
+      } catch (err) {
+        console.warn('Error enumerating devices:', err);
+      }
+    };
+    
+    if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
+      checkCameras();
+      navigator.mediaDevices.addEventListener('devicechange', checkCameras);
+      return () => {
+        navigator.mediaDevices.removeEventListener('devicechange', checkCameras);
+      };
+    }
+  }, []);
+
+  useEffect(() => {
     startCamera(facingMode);
     return () => {
       stopCurrentStream();
@@ -97,7 +120,16 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
   }, [facingMode, startCamera, stopCurrentStream]);
 
   const toggleCameraFacing = () => {
-    setFacingMode((prev) => (prev === 'user' ? 'environment' : 'user'));
+    setFacingMode((prev) => {
+      const next = prev === 'user' ? 'environment' : 'user';
+      // Auto-set mirror: ON for selfie, OFF for rear
+      setIsMirrored(next === 'user');
+      return next;
+    });
+  };
+
+  const toggleMirror = () => {
+    setIsMirrored((prev) => !prev);
   };
 
   const handleCapture = () => {
@@ -121,8 +153,8 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
     // Move to center of canvas
     ctx.translate(targetW / 2, targetH / 2);
 
-    // Mirror user-facing camera horizontally for natural selfie capture
-    if (facingMode === 'user') {
+    // Mirror the captured image if mirror mode is active
+    if (isMirrored) {
       ctx.scale(-1, 1);
     }
 
@@ -181,23 +213,13 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
           <span className="text-xs font-semibold tracking-wider text-white/90 uppercase block font-['Manrope']">
             {eventName}
           </span>
-          <span className="text-[10px] text-[#C9A227] font-mono uppercase tracking-wider">
-            {facingMode === 'user' ? 'Front (Selfie)' : 'Main Camera (Rear)'}
+          <span className="text-[10px] text-white/60 font-mono uppercase tracking-wider">
+            {facingMode === 'user' ? 'Selfie' : 'Rear'}{isMirrored ? ' · Mirrored' : ''}
           </span>
         </div>
 
-        {/* Quick flip toggle in top header */}
-        <button
-          onClick={toggleCameraFacing}
-          disabled={!!cameraError}
-          className="min-h-[44px] px-3 rounded-full bg-black/40 hover:bg-black/60 active:scale-95 transition-all flex items-center gap-1.5 text-xs font-medium cursor-pointer disabled:opacity-30"
-          title={facingMode === 'user' ? 'Switch to Main Camera' : 'Switch to Selfie Camera'}
-        >
-          <SwitchCamera className="w-4 h-4 text-[#C9A227]" />
-          <span className="font-semibold text-[11px]">
-            {facingMode === 'user' ? 'Main' : 'Selfie'}
-          </span>
-        </button>
+        {/* Spacer to keep header balanced */}
+        <div className="min-h-[44px] min-w-[44px]" />
       </div>
 
       {/* Main Viewfinder Area */}
@@ -255,7 +277,7 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
               muted
               autoPlay
               style={{
-                transform: facingMode === 'user' ? 'scaleX(-1)' : 'none',
+                transform: isMirrored ? 'scaleX(-1)' : 'none',
               }}
               className="w-full h-full object-cover"
             />
@@ -266,53 +288,75 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
         )}
       </div>
 
-      {/* Ergonomic Bottom Controls Bar: Gallery | Shutter | Flip Camera (Selfie/Main) */}
-      <div className="bg-black/85 backdrop-blur-md px-6 py-4 pb-7 flex items-center justify-between">
-        {/* Gallery button */}
-        <button
-          type="button"
-          onClick={() => fileInputRef.current?.click()}
-          aria-label="Upload photo from gallery"
-          className="min-h-[48px] min-w-[48px] p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white/90 active:scale-95 transition-all flex flex-col items-center justify-center cursor-pointer"
-          title="Upload from gallery"
-        >
-          <ImageIcon className="w-5 h-5" />
-          <span className="text-[9px] text-white/70 mt-0.5">Gallery</span>
-        </button>
-
-        {/* Shutter Button: White outer ring, emerald center, subtle gold micro-accent */}
-        <div className="relative flex items-center justify-center">
+      {/* Bottom Controls Bar */}
+      <div className="bg-black/85 backdrop-blur-md px-4 py-4 pb-7">
+        {/* Main row: Gallery | Shutter | Flip */}
+        <div className="flex items-center justify-between">
+          {/* Gallery button */}
           <button
             type="button"
-            onClick={handleCapture}
-            disabled={!!cameraError || isLoadingCamera}
-            aria-label="Capture photo"
-            className="w-20 h-20 rounded-full border-4 border-white p-1 flex items-center justify-center active:scale-90 transition-transform disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+            onClick={() => fileInputRef.current?.click()}
+            aria-label="Upload photo from gallery"
+            className="min-h-[48px] min-w-[48px] p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white/90 active:scale-95 transition-all flex flex-col items-center justify-center cursor-pointer"
+            title="Upload from gallery"
           >
-            <div className="relative w-full h-full bg-[#006B3C] hover:bg-[#004D2C] rounded-full flex items-center justify-center shadow-md">
-              {/* Subtle gold micro-accent center dot */}
-              <div className="w-2.5 h-2.5 rounded-full bg-[#C9A227]" />
-            </div>
+            <ImageIcon className="w-5 h-5" />
+            <span className="text-[9px] text-white/70 mt-0.5">Gallery</span>
           </button>
+
+          {/* Shutter Button */}
+          <div className="relative flex items-center justify-center">
+            <button
+              type="button"
+              onClick={handleCapture}
+              disabled={!!cameraError || isLoadingCamera}
+              aria-label="Capture photo"
+              className="w-20 h-20 rounded-full border-4 border-white p-1 flex items-center justify-center active:scale-90 transition-transform disabled:opacity-30 disabled:pointer-events-none cursor-pointer"
+            >
+              <div className="relative w-full h-full bg-[#006B3C] hover:bg-[#004D2C] rounded-full flex items-center justify-center shadow-md">
+                {/* Subtle gold micro-accent center dot */}
+                <div className="w-2.5 h-2.5 rounded-full bg-[#C9A227]" />
+              </div>
+            </button>
+          </div>
+
+          {/* Flip Camera (Selfie ↔ Rear) - Only show if device has multiple cameras */}
+          {hasMultipleCameras ? (
+            <button
+              type="button"
+              onClick={toggleCameraFacing}
+              disabled={!!cameraError}
+              aria-label={facingMode === 'user' ? 'Switch to rear camera' : 'Switch to selfie camera'}
+              className="min-h-[48px] min-w-[48px] p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white/90 active:scale-95 transition-all flex flex-col items-center justify-center cursor-pointer disabled:opacity-30"
+              title={facingMode === 'user' ? 'Switch to rear camera' : 'Switch to selfie camera'}
+            >
+              <SwitchCamera className="w-5 h-5 text-[#C9A227]" />
+              <span className="text-[9px] text-white/70 mt-0.5">
+                {facingMode === 'user' ? 'Rear' : 'Selfie'}
+              </span>
+            </button>
+          ) : (
+            <div className="min-h-[48px] min-w-[48px]" />
+          )}
         </div>
 
-        {/* Flip front / back camera lens (Selfie vs Main Camera) */}
-        <button
-          type="button"
-          onClick={toggleCameraFacing}
-          disabled={!!cameraError}
-          aria-label="Flip between selfie and main camera"
-          className="min-h-[48px] px-3.5 rounded-full bg-white/10 hover:bg-white/20 text-white/90 active:scale-95 transition-all flex items-center gap-2 disabled:opacity-30 cursor-pointer border border-white/10"
-          title={`Currently ${facingMode === 'user' ? 'Selfie (Front)' : 'Main (Rear)'}. Tap to switch`}
-        >
-          <SwitchCamera className="w-5 h-5 text-[#C9A227]" />
-          <div className="flex flex-col text-left leading-tight">
-            <span className="text-[9px] text-white/60 uppercase tracking-wider font-mono">Flip to</span>
-            <span className="text-xs font-bold text-white">
-              {facingMode === 'user' ? 'Main' : 'Selfie'}
-            </span>
-          </div>
-        </button>
+        {/* Secondary row: Mirror toggle */}
+        <div className="flex items-center justify-center mt-3">
+          <button
+            type="button"
+            onClick={toggleMirror}
+            disabled={!!cameraError}
+            className={`h-8 px-4 rounded-full text-[11px] font-semibold flex items-center gap-1.5 active:scale-95 transition-all cursor-pointer disabled:opacity-30 ${
+              isMirrored
+                ? 'bg-[#C9A227]/20 text-[#C9A227] border border-[#C9A227]/30'
+                : 'bg-white/10 text-white/60 border border-white/10 hover:bg-white/15'
+            }`}
+            title={isMirrored ? 'Mirror is ON — photo will appear flipped' : 'Mirror is OFF — photo will appear as-is'}
+          >
+            <FlipHorizontal className="w-3.5 h-3.5" />
+            <span>Mirror {isMirrored ? 'ON' : 'OFF'}</span>
+          </button>
+        </div>
       </div>
     </div>
   );

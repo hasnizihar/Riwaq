@@ -19,6 +19,7 @@ import {
   Camera,
   Maximize2,
   ShieldCheck,
+  Lock,
 } from 'lucide-react';
 import { RiwaqLogo } from '../common/RiwaqLogo';
 
@@ -162,6 +163,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
         {/* Actions */}
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => window.dispatchEvent(new Event('admin_logout'))}
+            className="h-10 px-3.5 bg-[#FAFAF7] hover:bg-[#F3F4F1] text-[#66706A] hover:text-[#B42318] border border-[#E5E9E6] text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-colors"
+            title="Lock Admin Session"
+          >
+            <Lock className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Lock Admin</span>
+          </button>
+
           <button
             onClick={() => onLaunchBooth(true)}
             className="h-10 px-3.5 bg-[#FAFAF7] hover:bg-[#EAF4EE] text-[#17201B] border border-[#E5E9E6] text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-colors hidden sm:flex"

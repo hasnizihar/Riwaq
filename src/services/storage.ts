@@ -19,8 +19,9 @@ import {
   syncEventToSupabase,
   syncTemplateToSupabase,
   deleteTemplateFromSupabase,
+  deletePhotoFromSupabase,
 } from './supabaseService';
-import { uploadOriginalPhoto, uploadGeneratedPhoto } from './cloudinaryService';
+import { uploadOriginalPhoto, uploadGeneratedPhoto, getCloudinaryConfig } from './cloudinaryService';
 
 const DB_NAME = 'EventPhotoBoothDB';
 const DB_VERSION = 3; // Version 3: photoToken index, emailStatus, expiresAt, downloadCount tracking
@@ -364,8 +365,30 @@ export async function getTemplates(eventId: string, activeOnly: boolean = false)
 
 export async function saveTemplate(template: PhotoTemplate): Promise<void> {
   const db = await getDB();
-  await putInStore(db, 'templates', template);
-  syncTemplateToSupabase(template).catch(() => {});
+
+  // Upload template image to Cloudinary if it's a local data URL
+  let templateToSave = { ...template };
+  const { cloudName } = getCloudinaryConfig();
+  const isLocalImage = template.imageUrl &&
+    (template.imageUrl.startsWith('data:') || template.imageUrl.startsWith('blob:'));
+
+  if (isLocalImage && cloudName && !cloudName.includes('your-cloud-name')) {
+    try {
+      const result = await uploadGeneratedPhoto(template.imageUrl, {
+        eventSlug: 'templates',
+        fileName: `template_${template.id}`,
+      });
+      if (result.isCloudStored && result.secureUrl) {
+        templateToSave.imageUrl = result.secureUrl;
+        console.info('[Storage] Template image uploaded to Cloudinary:', result.secureUrl);
+      }
+    } catch (err) {
+      console.warn('[Storage] Template Cloudinary upload failed, keeping local data URL:', err);
+    }
+  }
+
+  await putInStore(db, 'templates', templateToSave);
+  syncTemplateToSupabase(templateToSave).catch(() => {});
 }
 
 export async function deleteTemplate(templateId: string): Promise<void> {
@@ -701,6 +724,10 @@ export async function incrementDownloadCount(photoIdOrToken: string): Promise<nu
 export async function deletePhoto(photoId: string): Promise<void> {
   const db = await getDB();
   await deleteFromStore(db, 'photos', photoId);
+  // Also delete from Supabase cloud database
+  deletePhotoFromSupabase(photoId).catch((err) => {
+    console.warn('[Storage] Background cloud photo deletion failed:', err);
+  });
 }
 
 export async function getEventStats(eventId: string) {
