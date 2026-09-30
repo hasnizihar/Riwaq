@@ -66,6 +66,17 @@ export const CameraCapture: React.FC<CameraCaptureProps> = ({
       currentStreamRef.current = mediaStream;
       setStream(mediaStream);
 
+      // Re-check cameras now that we have guaranteed permission
+      if (navigator.mediaDevices.enumerateDevices) {
+        try {
+          const devices = await navigator.mediaDevices.enumerateDevices();
+          const videoInputs = devices.filter(d => d.kind === 'videoinput');
+          setHasMultipleCameras(videoInputs.length > 1);
+        } catch (e) {
+          console.warn('Post-permission enumeration failed', e);
+        }
+      }
+
       if (videoRef.current) {
         videoRef.current.srcObject = mediaStream;
         await videoRef.current.play().catch((err) => {
