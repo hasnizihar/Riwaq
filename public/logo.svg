@@ -1,0 +1,259 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="100%" height="100%">
+  <defs>
+    <!-- Emerald Gradients -->
+    <linearGradient id="emeraldDepth" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00351E" />
+      <stop offset="60%" stop-color="#004D2C" />
+      <stop offset="100%" stop-color="#006B3C" />
+    </linearGradient>
+
+    <!-- Warm Antique Gold Gradients -->
+    <linearGradient id="goldLuster" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E5C158" />
+      <stop offset="50%" stop-color="#C9A227" />
+      <stop offset="100%" stop-color="#9E7A16" />
+    </linearGradient>
+
+    <linearGradient id="goldSoft" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#D4AF37" />
+      <stop offset="100%" stop-color="#B8860B" />
+    </linearGradient>
+
+    <!-- Subtle Drop Shadow for Lantern & Details -->
+    <filter id="subtleGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.12" />
+    </filter>
+  </defs>
+
+  <!-- Clean Background (transparent by default or pure white) -->
+  <rect width="500" height="500" fill="none" />
+
+  <!-- ================= ARCHITECTURAL ARCHWAY ================= -->
+  <g id="riwaq-arch" transform="translate(0, 0)">
+    <!-- Outer Golden Arch Frame Line -->
+    <path
+      d="M 160 310 L 160 200 C 160 145 205 95 250 90 C 295 95 340 145 340 200 L 340 310"
+      fill="none"
+      stroke="url(#goldLuster)"
+      stroke-width="3.5"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+
+    <!-- Deep Emerald Inner Islamic Arch (The Colonnade Interior) -->
+    <!-- Pointed Moorish Arch Contour -->
+    <path
+      d="M 215 135 
+         C 230 115 245 98 250 94 
+         C 255 98 270 115 285 135 
+         C 310 168 330 205 330 250 
+         L 330 310 
+         L 270 310 
+         L 270 230 
+         C 270 215 260 205 250 205 
+         C 240 205 230 215 230 230 
+         L 230 310 
+         L 205 310 
+         L 205 200 
+         C 205 170 210 145 215 135 Z"
+      fill="url(#emeraldDepth)"
+    />
+
+    <!-- Colonnade Arched Perspective Windows / Depth Arches -->
+    <!-- Window 1 (Front/Right Column Perspective) -->
+    <path
+      d="M 270 300 L 270 225 C 270 210 282 195 296 195 C 310 195 322 210 322 225 L 322 300 Z"
+      fill="#FFFFFF"
+      opacity="0.94"
+    />
+    <path
+      d="M 278 295 L 278 230 C 278 220 286 210 296 210 C 306 210 314 220 314 230 L 314 295 Z"
+      fill="url(#emeraldDepth)"
+      opacity="0.6"
+    />
+
+    <!-- Window 2 (Middle Receding Arch) -->
+    <path
+      d="M 285 295 L 285 240 C 285 228 293 218 303 218 C 313 218 321 228 321 240 L 321 295 Z"
+      fill="#FFFFFF"
+      opacity="0.95"
+    />
+    <path
+      d="M 290 295 L 290 245 C 290 235 296 226 303 226 C 310 226 316 235 316 245 L 316 295 Z"
+      fill="#002D18"
+      opacity="0.75"
+    />
+
+    <!-- Window 3 (Deepest Receding Arch) -->
+    <path
+      d="M 306 295 L 306 250 C 306 240 312 232 319 232 C 324 232 328 240 328 250 L 328 295 Z"
+      fill="#FFFFFF"
+      opacity="0.98"
+    />
+
+    <!-- Inner White Arch Body (Foreground Portal) -->
+    <path
+      d="M 164 310 L 164 200 C 164 148 208 100 250 95 C 265 108 273 125 273 145 L 273 310 L 164 310 Z"
+      fill="#FFFFFF"
+    />
+
+    <!-- Hanging Golden Lantern (Fanous) -->
+    <!-- Lantern Chain -->
+    <line x1="214" y1="140" x2="214" y2="175" stroke="url(#goldLuster)" stroke-width="1.8" />
+    
+    <!-- Lantern Crown / Cap -->
+    <path
+      d="M 206 177 C 206 174 222 174 222 177 L 220 183 L 208 183 Z"
+      fill="url(#goldLuster)"
+    />
+    <!-- Lantern Glass & Filigree Frame -->
+    <path
+      d="M 204 184 L 200 206 L 208 226 L 220 226 L 228 206 L 224 184 Z"
+      fill="none"
+      stroke="url(#goldLuster)"
+      stroke-width="2"
+      stroke-linejoin="round"
+    />
+    <!-- Inner Lantern Glow & Glass Ribs -->
+    <path
+      d="M 205 186 L 202 206 L 209 224 L 219 224 L 226 206 L 223 186 Z"
+      fill="#FFFDF7"
+      opacity="0.9"
+    />
+    <line x1="209" y1="185" x2="209" y2="225" stroke="url(#goldLuster)" stroke-width="1.4" />
+    <line x1="214" y1="184" x2="214" y2="226" stroke="url(#goldLuster)" stroke-width="1.6" />
+    <line x1="219" y1="185" x2="219" y2="225" stroke="url(#goldLuster)" stroke-width="1.4" />
+    <!-- Lantern Base & Bottom Finial -->
+    <path
+      d="M 207 226 L 221 226 L 216 235 L 212 235 Z"
+      fill="url(#goldLuster)"
+    />
+    <circle cx="214" cy="238" r="2" fill="url(#goldLuster)" />
+
+    <!-- ================= BOTANICAL BRANCH (RIGHT SIDE) ================= -->
+    <g id="botanical-branch">
+      <!-- Main Elegant Branch Stem (Flows behind and around the arch) -->
+      <path
+        d="M 290 325 
+           C 320 315 355 270 365 240 
+           C 375 210 370 190 350 195"
+        fill="none"
+        stroke="url(#goldLuster)"
+        stroke-width="3"
+        stroke-linecap="round"
+      />
+
+      <!-- Leaves along the branch (Deep Emerald and Warm Antique Gold) -->
+      <!-- Leaf 1 (Top Left Emerald) -->
+      <path d="M 345 196 C 342 186 352 178 358 178 C 362 186 354 195 345 196 Z" fill="#004D2C" />
+
+      <!-- Leaf 2 (Topmost Gold Accent) -->
+      <path d="M 360 220 C 366 210 380 216 384 224 C 378 230 366 226 360 220 Z" fill="url(#goldLuster)" />
+
+      <!-- Leaf 3 (Gold Accent Leaf, Upper Right) -->
+      <path d="M 370 240 C 382 234 390 244 388 254 C 378 254 372 246 370 240 Z" fill="url(#goldLuster)" />
+
+      <!-- Leaf 4 (Emerald, Middle Outer) -->
+      <path d="M 358 245 C 364 235 376 237 380 248 C 372 254 362 250 358 245 Z" fill="#004D2C" />
+
+      <!-- Leaf 5 (Emerald, Middle Inner) -->
+      <path d="M 355 260 C 352 248 362 242 368 246 C 368 256 360 262 355 260 Z" fill="#004D2C" />
+
+      <!-- Leaf 6 (Emerald, Lower Outer) -->
+      <path d="M 362 272 C 376 266 386 278 382 290 C 370 288 364 280 362 272 Z" fill="#004D2C" />
+
+      <!-- Leaf 7 (Emerald, Lower Inner) -->
+      <path d="M 346 276 C 344 266 354 260 360 266 C 360 274 352 280 346 276 Z" fill="#004D2C" />
+
+      <!-- Leaf 8 (Gold Accent, Base of Branch) -->
+      <path d="M 325 310 C 334 298 348 300 350 312 C 340 318 330 316 325 310 Z" fill="url(#goldLuster)" />
+
+      <!-- Leaf 9 (Emerald, Bottom Accent) -->
+      <path d="M 340 312 C 352 305 362 314 360 324 C 348 325 342 318 340 312 Z" fill="#004D2C" />
+    </g>
+  </g>
+
+  <!-- ================= TYPOGRAPHY: RIWAQ UTH-THAQAFA ================= -->
+  <g id="riwaq-brand-text">
+    <!-- Main Wordmark: RIWAQ in Classical Emerald Serif -->
+    <!-- R -->
+    <path
+      d="M 85 396 L 105 396 L 105 393 L 99 393 L 99 330 L 108 330 
+         C 124 330 135 338 135 352 
+         C 135 364 126 372 114 374 
+         L 134 393 L 144 393 L 144 396 L 126 396 L 110 376 L 99 376 L 99 393 L 105 393 L 105 396 L 85 396 Z
+         M 99 333 L 99 373 L 109 373 C 120 373 126 366 126 353 C 126 339 119 333 108 333 Z"
+      fill="#004D2C"
+    />
+
+    <!-- I -->
+    <path
+      d="M 152 396 L 170 396 L 170 393 L 164 393 L 164 333 L 170 333 L 170 330 L 152 330 L 152 333 L 158 333 L 158 393 L 152 393 Z"
+      fill="#004D2C"
+    />
+
+    <!-- W -->
+    <path
+      d="M 174 330 L 190 330 L 190 333 L 184 333 L 198 393 L 210 339 L 205 333 L 205 330 L 220 330 L 220 333 L 215 333 L 228 393 L 243 333 L 237 333 L 237 330 L 253 330 L 253 333 L 248 333 L 232 396 L 224 396 L 211 345 L 198 396 L 190 396 L 175 333 L 174 333 Z"
+      fill="#004D2C"
+    />
+
+    <!-- A -->
+    <path
+      d="M 254 396 L 270 396 L 270 393 L 264 393 L 285 330 L 293 330 L 314 393 L 308 393 L 308 396 L 328 396 L 328 393 L 321 393 L 316 378 L 282 378 L 277 393 L 270 393 Z
+         M 284 374 L 314 374 L 299 334 Z"
+      fill="#004D2C"
+    />
+
+    <!-- Q with Flourish Swash and Centered Gold Diamond -->
+    <!-- Q Body -->
+    <path
+      d="M 374 328 
+         C 348 328 333 346 333 365 
+         C 333 384 348 402 374 402 
+         C 388 402 399 396 405 386 
+         C 416 397 428 415 448 424 
+         C 434 420 422 411 414 400 
+         C 416 392 418 382 418 365 
+         C 418 346 403 328 374 328 Z
+         M 374 332 
+         C 396 332 408 348 408 365 
+         C 408 380 401 395 385 397 
+         L 396 384 
+         C 388 386 381 387 374 387 
+         C 353 387 342 372 342 365 
+         C 342 348 354 332 374 332 Z"
+      fill="#004D2C"
+    />
+
+    <!-- Swashing Tail under Q -->
+    <path
+      d="M 382 390 
+         C 394 392 412 398 420 408 
+         C 430 420 442 426 454 425 
+         C 440 424 430 417 422 405 
+         C 414 395 398 388 382 390 Z"
+      fill="#004D2C"
+    />
+
+    <!-- Centered Gold Diamond Accent (✦) in Q Counter -->
+    <path
+      d="M 375 358 L 380 365 L 375 372 L 370 365 Z"
+      fill="url(#goldLuster)"
+    />
+
+    <!-- Subtitle: UTH-THAQAFA in Elegant Tracked Font -->
+    <text
+      x="250"
+      y="426"
+      text-anchor="middle"
+      fill="#17201B"
+      font-family="'Cinzel', 'Trajan Pro', 'Didot', 'Georgia', serif"
+      font-size="16"
+      font-weight="600"
+      letter-spacing="0.32em"
+    >
+      UTH-THAQAFA
+    </text>
+  </g>
+</svg>

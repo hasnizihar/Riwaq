@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="100%" height="100%">
+  <defs>
+    <linearGradient id="favEmerald" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#00351E" />
+      <stop offset="60%" stop-color="#004D2C" />
+      <stop offset="100%" stop-color="#006B3C" />
+    </linearGradient>
+    <linearGradient id="favGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E5C158" />
+      <stop offset="50%" stop-color="#C9A227" />
+      <stop offset="100%" stop-color="#9E7A16" />
+    </linearGradient>
+  </defs>
+
+  <!-- Clean rounded background badge -->
+  <rect width="128" height="128" rx="28" fill="#FFFFFF" />
+  <rect width="124" height="124" x="2" y="2" rx="26" fill="none" stroke="#E5E9E6" stroke-width="1.5" />
+
+  <!-- Outer Golden Arch Frame Line -->
+  <path
+    d="M 38 100 L 38 52 C 38 32 50 18 64 16 C 78 18 90 32 90 52 L 90 100"
+    fill="none"
+    stroke="url(#favGold)"
+    stroke-width="2.2"
+    stroke-linecap="round"
+  />
+
+  <!-- Emerald Colonnade Interior Depth -->
+  <path
+    d="M 52 30 C 58 22 62 18 64 17 C 66 18 70 22 76 30 C 84 42 88 56 88 72 L 88 100 L 70 100 L 70 70 C 70 64 67 60 64 60 C 61 60 58 64 58 70 L 58 100 L 50 100 L 50 52 C 50 42 51 34 52 30 Z"
+    fill="url(#favEmerald)"
+  />
+
+  <!-- Colonnade Arched Receding Portals -->
+  <path
+    d="M 70 98 L 70 72 C 70 66 74 62 78 62 C 82 62 86 66 86 72 L 86 98 Z"
+    fill="#FFFFFF"
+    opacity="0.95"
+  />
+  <path
+    d="M 73 98 L 73 74 C 73 70 76 66 79 66 C 82 66 85 70 85 74 L 85 98 Z"
+    fill="url(#favEmerald)"
+    opacity="0.75"
+  />
+
+  <!-- Foreground White Portal Arch -->
+  <path
+    d="M 39 100 L 39 52 C 39 34 52 19 64 17.5 C 69 22 72 28 72 36 L 72 100 L 39 100 Z"
+    fill="#FFFFFF"
+  />
+
+  <!-- Hanging Golden Lantern (Fanous) -->
+  <line x1="55" y1="36" x2="55" y2="48" stroke="url(#favGold)" stroke-width="1.2" />
+  <path d="M 51 49 C 51 47 59 47 59 49 L 58 52 L 52 52 Z" fill="url(#favGold)" />
+  <path d="M 50 53 L 48 64 L 52 74 L 58 74 L 62 64 L 60 53 Z" fill="none" stroke="url(#favGold)" stroke-width="1.4" />
+  <path d="M 51 54 L 49 64 L 53 73 L 57 73 L 61 64 L 59 54 Z" fill="#FFFDF7" opacity="0.9" />
+  <line x1="55" y1="53" x2="55" y2="74" stroke="url(#favGold)" stroke-width="1.2" />
+  <circle cx="55" cy="78" r="1.5" fill="url(#favGold)" />
+
+  <!-- Botanical Olive/Laurel Branch with Emerald & Gold Leaves -->
+  <path
+    d="M 75 102 C 86 98 97 80 100 68 C 103 56 100 48 94 50"
+    fill="none"
+    stroke="url(#favGold)"
+    stroke-width="1.8"
+    stroke-linecap="round"
+  />
+  <!-- Leaves -->
+  <path d="M 92 51 C 90 47 95 44 98 44 C 99 48 96 52 92 51 Z" fill="#004D2C" />
+  <path d="M 98 58 C 102 54 107 57 108 61 C 105 64 100 62 98 58 Z" fill="url(#favGold)" />
+  <path d="M 101 68 C 106 66 110 70 109 75 C 104 75 102 71 101 68 Z" fill="url(#favGold)" />
+  <path d="M 97 73 C 101 68 106 70 107 75 C 103 78 99 76 97 73 Z" fill="#004D2C" />
+  <path d="M 98 84 C 104 81 108 86 107 91 C 101 90 99 87 98 84 Z" fill="#004D2C" />
+  <path d="M 86 96 C 90 91 96 92 97 97 C 92 100 88 99 86 96 Z" fill="url(#favGold)" />
+
+  <!-- Mini Bottom RIWAQ wordmark serif typography -->
+  <text
+    x="64"
+    y="116"
+    text-anchor="middle"
+    fill="#004D2C"
+    font-family="'Cinzel', 'Trajan Pro', 'Didot', 'Georgia', serif"
+    font-size="12"
+    font-weight="700"
+    letter-spacing="0.12em"
+  >
+    RIWAQ
+  </text>
+  <!-- Tiny Gold Accent Diamond in bottom center -->
+  <path d="M 64 121 L 65.5 123 L 64 125 L 62.5 123 Z" fill="url(#favGold)" />
+</svg>

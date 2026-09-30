@@ -1,0 +1,10 @@
+{
+  "name": "Event Photo Booth",
+  "description": "Mobile-first event photo booth web app for organizers. Capture, crop, overlay PNG frames, and deliver composite event photos in seconds.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
